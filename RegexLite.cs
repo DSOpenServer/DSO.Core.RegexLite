@@ -4,7 +4,7 @@ using static DSO.Core.RegexLite.RegexLite;
 
 namespace DSO.Core.RegexLite
 {
-    public sealed class RegexLite
+    public sealed partial class RegexLite
     {
         // ---------------- Public Match ----------------
         public readonly struct LiteMatch
@@ -823,7 +823,7 @@ namespace DSO.Core.RegexLite
     }
 
     // küçük helper
-    public static class RegexLiteHelpers
+    public static partial class RegexLiteHelpers
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ReadOnlySpan<char> AsSpanOrEmpty(this string s)
