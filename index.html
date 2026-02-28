@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="RegexLite — Regex gerektirmeyen, span tabanlı, allocation-minimal metin çıkarıcı. .NET 6+ uyumlu." />
+  <title>DSO.Core.RegexLite — Dokümantasyon</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="DSO.Core.RegexLite — Dokümantasyon" />
+  <meta property="og:description" content="Regex gerektirmeyen, span tabanlı, allocation-minimal metin çıkarıcı. .NET 6+ uyumlu." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --faint: rgba(255,255,255,.55);
+      --line: rgba(255,255,255,.12);
+      --brand: #2f81f7;           /* GitHub-ish blue */
+      --brand2: #00b3ff;          /* accent */
+      --ok: #38d39f;
+      --warn: #ffd166;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --r: 18px;
+      --r2: 14px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 10% 10%, rgba(47,129,247,.25), transparent 60%),
+        radial-gradient(900px 600px at 90% 15%, rgba(0,179,255,.18), transparent 65%),
+        radial-gradient(900px 600px at 70% 90%, rgba(56,211,159,.12), transparent 60%),
+        linear-gradient(180deg, #070b14 0%, var(--bg) 100%);
+      overflow-x:hidden;
+    }
+    a{color:inherit; text-decoration:none}
+    a:hover{opacity:.92}
+    .wrap{max-width:1140px;margin:0 auto;padding:28px 18px 64px}
+    .topbar{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter: blur(10px);
+      background: rgba(7,11,20,.75);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar .inner{max-width:1140px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px}
+    .logos{display:flex;align-items:center;gap:10px;min-width:280px}
+    .logo-img{
+      width:40px;height:40px;border-radius:12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      object-fit:cover;
+    }
+    .brandlock{
+      display:flex;flex-direction:column;gap:2px;line-height:1.1
+    }
+    .brandlock strong{font-size:13px;letter-spacing:.2px}
+    .brandlock span{font-size:12px;color:var(--muted)}
+    .spacer{flex:1}
+    .nav{
+      display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end
+    }
+    .nav a{
+      font-size:13px;color:var(--muted);
+      padding:8px 10px;border-radius:10px;
+      border:1px solid transparent;
+    }
+    .nav a:hover{color:var(--text);border-color:var(--line);background:rgba(255,255,255,.04)}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      box-shadow: 0 18px 40px rgba(0,0,0,.30);
+      color:var(--text);
+      font-size:13px;
+    }
+    .btn.primary{
+      border-color: rgba(47,129,247,.35);
+      background: linear-gradient(180deg, rgba(47,129,247,.28), rgba(47,129,247,.10));
+    }
+    .hero{
+      padding:44px 0 22px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .card{
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+    }
+    .hero-left{padding:26px 22px}
+    .kicker{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(47,129,247,.28);
+      background: rgba(47,129,247,.10);
+      color: rgba(255,255,255,.86);
+      font-size:12px;
+    }
+    .dot{width:7px;height:7px;border-radius:99px;background:var(--ok);box-shadow:0 0 0 4px rgba(56,211,159,.18)}
+    h1{
+      margin:14px 0 10px;
+      font-size:34px;
+      letter-spacing:-.4px;
+      line-height:1.08;
+    }
+    .lead{color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 18px}
+    .badges{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:12px;color:var(--muted);
+      padding:8px 10px;border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+    }
+    .hero-right{padding:18px}
+    .panel{
+      padding:16px;border-radius:16px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .panel h3{margin:0 0 10px;font-size:14px}
+    .kv{display:grid;grid-template-columns: 120px 1fr;gap:10px 12px;font-size:13px;color:var(--muted)}
+    .kv b{color:var(--text);font-weight:600}
+    .grid{
+      display:grid;grid-template-columns: 1fr 1fr;gap:14px;margin-top:14px
+    }
+    .section{margin-top:18px;padding:22px}
+    .section h2{margin:0 0 10px;font-size:18px;letter-spacing:-.2px}
+    .section p{margin:0;color:var(--muted);line-height:1.65;font-size:14px}
+    ul{margin:10px 0 0 18px;color:var(--muted);line-height:1.7}
+    code,kbd,pre{font-family:var(--mono)}
+    pre{
+      margin:12px 0 0;
+      padding:14px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.28);
+      overflow:auto;
+      color: rgba(255,255,255,.88);
+      font-size:12.6px;
+      line-height:1.55;
+    }
+    .callout{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,209,102,.25);
+      background: rgba(255,209,102,.10);
+      color: rgba(255,255,255,.86);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .footer{
+      margin-top:18px;
+      padding:18px 22px;
+      display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between
+    }
+    .fine{color:var(--faint);font-size:12px;line-height:1.5}
+    .hr{height:1px;background:var(--line);margin:18px 0}
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap}
+    .pill{
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      font-size:12px;
+    }
+    .twoCol{display:grid;grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px}
+    .miniTitle{font-size:13px;color:var(--text);margin:0 0 6px}
+    .muted{color:var(--muted)}
+    .svgwordmark{display:flex;align-items:center;gap:10px}
+    .svgwordmark svg{width:150px;height:auto}
+    .svgHint{font-size:11px;color:var(--faint);margin-top:6px}
+
+    @media (max-width: 940px){
+      .hero{grid-template-columns:1fr}
+      .logos{min-width:auto}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="inner">
+      <div class="logos">
+        <!-- DSOpenServer org avatar -->
+        <img class="logo-img" src="https://avatars.githubusercontent.com/u/230051382?s=200&v=4" alt="DSOpenServer" />
+
+        <div class="brandlock">
+          <strong>DSO.Core.RegexLite</strong>
+          <span>Span tabanlı • allocation-minimal • .NET 6+</span>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <nav class="nav" aria-label="Sayfa menüsü">
+        <a href="#ozellikler">Özellikler</a>
+        <a href="#kurulum">Kurulum</a>
+        <a href="#hizli">Hızlı Başlangıç</a>
+        <a href="#api">API</a>
+        <a href="#katki">Katkı</a>
+      </nav>
+
+      <a class="btn primary" href="https://github.com/DSOpenServer/DSO.Core.RegexLite" target="_blank" rel="noreferrer">
+        GitHub’da Aç
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="card hero-left">
+        <div class="kicker"><span class="dot" aria-hidden="true"></span> DokuzSistem Open Server ekosistemi</div>
+        <h1>RegexLite</h1>
+        <p class="lead">
+          <b>RegexLite</b>, “başlangıç–bitiş belirteçleri” ile çalışan, <b>Regex gerektirmeyen</b>,
+          <b>span tabanlı</b> ve <b>allocation-minimal</b> bir metin çıkarıcıdır. O(n) tarama yaklaşımıyla
+          basit kurallı senaryolarda hızlı ve öngörülebilir bir alternatif sunar.
+        </p>
+
+        <div class="pillrow">
+          <span class="pill">O(n) tarama</span>
+          <span class="pill">ReadOnlySpan/Memory</span>
+          <span class="pill">includeBounds</span>
+          <span class="pill">required / excluded</span>
+          <span class="pill">allowNesting</span>
+          <span class="pill">escapeChar</span>
+          <span class="pill">StringComparison</span>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="badges">
+          <a class="badge" href="https://github.com/DSOpenServer/DSO.Core.RegexLite/blob/main/LICENSE" target="_blank" rel="noreferrer">
+            <span aria-hidden="true">📄</span> MIT Lisansı
+          </a>
+          <span class="badge"><span aria-hidden="true">🧩</span> Tek dosya: <code>RegexLite.cs</code></span>
+          <span class="badge"><span aria-hidden="true">⚡</span> Düşük GC • kopyasız işleme</span>
+        </div>
+      </div>
+
+      <aside class="card hero-right">
+        <div class="panel">
+          <h3>Kurumsal</h3>
+
+          <!-- DokuzSistem logo: Inline SVG wordmark (yerine gerçek logo URL’i verince img ekleyebilirsin) -->
+          <div class="svgwordmark" aria-label="DokuzSistem">
+            <svg viewBox="0 0 420 110" role="img" aria-label="DokuzSistem">
+              <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                  <stop offset="0" stop-color="#2f81f7"/>
+                  <stop offset="1" stop-color="#00b3ff"/>
+                </linearGradient>
+              </defs>
+              <g>
+                <path d="M55 18c19 0 34 15 34 34S74 86 55 86 21 71 21 52 36 18 55 18Z" fill="url(#g)" opacity=".95"/>
+                <path d="M64 34c-7 0-13 6-13 13 0 6 4 11 10 13-12 1-23-7-23-21 0-12 10-21 22-21 10 0 18 6 21 15-3-1-7- -? -? " fill="#07101f" opacity=".25"/>
+                <text x="102" y="66" font-family="ui-sans-serif, system-ui" font-size="44" font-weight="700" fill="rgba(255,255,255,.92)">DOKUZ</text>
+                <text x="250" y="66" font-family="ui-sans-serif, system-ui" font-size="44" font-weight="700" fill="rgba(255,255,255,.92)">Sistem</text>
+              </g>
+            </svg>
+          </div>
+          <div class="svgHint">
+            * Gerçek DokuzSistem logo dosya URL’ini paylaşırsan buraya <code>&lt;img&gt;</code> ile ekleyebilirim.
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="kv">
+            <span>Organizasyon</span><b>DSOpenServer</b>
+            <span>Repo</span><b>DSO.Core.RegexLite</b>
+            <span>Hedef</span><b>.NET 6+</b>
+            <span>Lisans</span><b>MIT</b>
+          </div>
+
+          <div style="height:14px"></div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn" href="https://github.com/DSOpenServer/DSO.Core.RegexLite" target="_blank" rel="noreferrer">Repo</a>
+            <a class="btn" href="https://github.com/DSOpenServer/DSO.Core.RegexLite/issues" target="_blank" rel="noreferrer">Issues</a>
+            <a class="btn" href="https://dokuzsistem.com/" target="_blank" rel="noreferrer">dokuzsistem.com</a>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="panel">
+            <h3>Ne için ideal?</h3>
+            <div class="muted" style="font-size:13px;line-height:1.6">
+              HTML benzeri blok çıkarma, parantezli içerik yakalama, “içerir/içermez” filtreli basit kurallar,
+              regex ifade gücüne ihtiyaç olmayan deterministik taramalar.
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Ne değil?</h3>
+            <div class="muted" style="font-size:13px;line-height:1.6">
+              Karmaşık regex desenleri, ileri düzey yakalama grupları ve backtracking gerektiren senaryolar.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="ozellikler" class="card section">
+      <h2>Özellikler</h2>
+      <p>
+        RegexLite; <code>open</code>/<code>close</code> belirteçleriyle tarama yapar, gerektiğinde sınırları dahil eder,
+        eşleşmeleri en kısa/en uzun olarak seçebilir ve iç içe (nested) yapıları isteğe bağlı olarak dengeler.
+      </p>
+      <ul>
+        <li><b>Open/Close</b>: char veya string belirteçler (<code>(...)</code>, <code>&lt;div</code>…<code>&lt;/div&gt;</code> gibi)</li>
+        <li><b>Filtreler</b>: <code>requiredContains</code> ve <code>excludedContains</code></li>
+        <li><b>includeBounds</b>: open/close’u çıktıya dahil et/etme</li>
+        <li><b>longest</b>: en kısa (non-greedy) vs. en uzun eşleşme</li>
+        <li><b>allowNesting</b>: dengeli iç içe eşleşmeler</li>
+        <li><b>escapeChar</b>: kaçış karakteri desteği</li>
+        <li><b>StringComparison</b>: Ordinal varsayılan, IgnoreCase/kültür seçenekleri</li>
+        <li><b>Düşük GC</b>: sonuçlar <code>ReadOnlyMemory&lt;char&gt;</code>; string’e çevirmedikçe allocation yok</li>
+      </ul>
+      <div class="callout">
+        <b>Hedef:</b> Regex’in ifade gücüne ihtiyaç olmayan, <code>open/close + içerir/içermez</code> kurallı senaryolarda
+        daha basit, hızlı ve öngörülebilir bir alternatif.
+      </div>
+    </section>
+
+    <section id="kurulum" class="card section">
+      <h2>Kurulum</h2>
+      <p>Bu proje tek dosyalık bir yardımcıdır. NuGet gerekmez (ileride paketlenebilir).</p>
+      <pre><code>// 1) Bu dosyayı projenize ekleyin:
+RegexLite.cs
+
+// 2) Hedef çerçeve:
+.NET 6+</code></pre>
+    </section>
+
+    <section id="hizli" class="card section">
+      <h2>Hızlı Başlangıç</h2>
+      <p>Aşağıdaki örnek, <code>id=</code> içeren <code>&lt;div ... &lt;/div&gt;</code> bloklarını yakalar ve bazı kelimeleri dışlar.</p>
+      <pre><code>// id= içeren &lt;div ... &lt;/div&gt; bloklarını çıkar, hidden/disabled geçenleri ele
+var rx = new RegexLite(
+    open: "&lt;div",
+    close: "&lt;/div&gt;",
+    requiredContains: "id=",
+    excludedContains: new[] { "hidden", "disabled" },
+    includeBounds: true,         // &lt;div ... &lt;/div&gt; dahil
+    longest: false,              // en kısa (non-greedy)
+    allowNesting: false,
+    escapeChar: '\\',
+    comparison: StringComparison.Ordinal);
+
+// İlk eşleşme (Regex.Match gibi)
+var m = rx.Match(html);
+if (m.Success)
+{
+    // m.Memory → ReadOnlyMemory&lt;char&gt;
+    // m.Span   → ReadOnlySpan&lt;char&gt; (allocation yok)
+    Console.WriteLine(m.Value);  // string'e çevirmek istersen (allocate eder)
+}
+
+// Tüm eşleşmeler (Regex.Matches gibi)
+foreach (var mm in rx.Matches(html))
+{
+    // Kopyasız işleme:
+    var span = mm.Span;
+}
+
+// Replace — sabit metin
+string blocked = rx.Replace(html, "[BLOCK]");
+
+// Replace — evaluator
+string tagged = rx.Replace(html, mm =&gt; $"[{mm.Value}]");</code></pre>
+    </section>
+
+    <section id="api" class="card section">
+      <h2>API Özeti</h2>
+      <p>RegexLite iki kurucu (string/char belirteçler) ve temel Match/Maches/IsMatch/Replace operasyonlarını sağlar.</p>
+
+      <div class="twoCol">
+        <div class="panel">
+          <div class="miniTitle">Kurucular</div>
+          <pre><code>// String belirteçler
+public RegexLite(
+    string open,
+    string close,
+    string? requiredContains = null,
+    IReadOnlyList&lt;string&gt;? excludedContains = null,
+    bool includeBounds = false,
+    bool longest = false,
+    bool allowNesting = false,
+    char? escapeChar = null,
+    StringComparison comparison = StringComparison.Ordinal);
+
+// Char belirteçler
+public RegexLite(
+    char open,
+    char close,
+    string? requiredContains = null,
+    IReadOnlyList&lt;string&gt;? excludedContains = null,
+    bool includeBounds = false,
+    bool longest = false,
+    bool allowNesting = false,
+    char? escapeChar = null,
+    StringComparison comparison = StringComparison.Ordinal);</code></pre>
+        </div>
+
+        <div class="panel">
+          <div class="miniTitle">Metotlar</div>
+          <pre><code>// İlk eşleşme
+LiteMatch Match(string input, int startAt = 0);
+
+// Tüm eşleşmeler (liste)
+List&lt;LiteMatch&gt; Matches(string input, int startAt = 0, int maxMatches = int.MaxValue);
+
+// Varlık kontrolü
+bool IsMatch(string input, int startAt = 0);
+
+// Değiştir — sabit replacement
+string Replace(string input, string replacement, int startAt = 0, int maxReplacements = int.MaxValue);</code></pre>
+          <div class="callout" style="margin-top:10px">
+            <b>Performans ipucu:</b> Eşleşmeleri işlerken mümkünse <code>Span</code>/<code>Memory</code> üzerinden ilerle,
+            gerçekten gerektiğinde <code>.ToString()</code> ile string üret.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="katki" class="card section">
+      <h2>Katkı (Contributing)</h2>
+      <p>
+        Öneri ve geri bildirimler için issue açabilir, PR gönderebilirsiniz.
+        Kurumsal akış önerisi: küçük, odaklı PR; açıklayıcı commit mesajları; mümkünse örnek/test ekleme.
+      </p>
+
+      <div class="twoCol">
+        <div class="panel">
+          <div class="miniTitle">Hızlı katkı adımları</div>
+          <ul>
+            <li>Repo’yu fork’la</li>
+            <li>Feature/bugfix branch aç</li>
+            <li>Değişiklik + örnek kullanım ekle</li>
+            <li>PR aç ve senaryoyu anlat</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <div class="miniTitle">İletişim</div>
+          <div class="muted" style="font-size:13px;line-height:1.65">
+            Kurumsal bilgi ve hizmetler için: <a href="https://dokuzsistem.com/" target="_blank" rel="noreferrer"><b>dokuzsistem.com</b></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="card footer">
+      <div class="fine">
+        © <span id="y"></span> DokuzSistem • DSOpenServer — <b>DSO.Core.RegexLite</b><br/>
+        Bu sayfa GitHub Pages için tek dosya olarak tasarlanmıştır.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+        <a class="btn" href="https://github.com/DSOpenServer/" target="_blank" rel="noreferrer">DSOpenServer Org</a>
+        <a class="btn" href="https://github.com/DSOpenServer/DSO.Core.RegexLite/blob/main/README.md" target="_blank" rel="noreferrer">README</a>
+        <a class="btn" href="https://github.com/DSOpenServer/DSO.Core.RegexLite/blob/main/LICENSE" target="_blank" rel="noreferrer">LICENSE</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
